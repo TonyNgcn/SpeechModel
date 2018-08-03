@@ -2,14 +2,15 @@ import numpy as np
 from sklearn import svm
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
+from sklearn.externals import joblib
 
-path = u'training.data'  # 数据文件路径
+path = 'training.data'  # 数据文件路径
 data=np.loadtxt(path,dtype=float) #读取数据
 np.random.shuffle(data) #打乱数据
 
 #划分数据
 x, y = np.split(data, (6,), axis=1)
-x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=0, train_size=0.5)
+x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=0, train_size=0.75)
 
 #数据归一化
 scaler = preprocessing.StandardScaler().fit(x_train)  #保存训练集的标准差和均值
@@ -58,8 +59,10 @@ print('bestC:'+str(score['c'])+' bestgamma:'+str(score['g']))
 #bestC:1024.0 bestgamma:7.464263932294464
 clf = svm.SVC(C=1024.0, kernel='rbf', gamma=7.464263932294464, decision_function_shape='ovo')
 clf.fit(x_train, y_train.ravel())
-
-print("查看结果")
+#保存模型
+joblib.dump(clf, 'svm_train.pkl')
+#加载模型
+#clf = joblib.load('svm_train.pkl')
 #查看结果
 print("训练集精度")
 print(clf.score(x_train, y_train))
