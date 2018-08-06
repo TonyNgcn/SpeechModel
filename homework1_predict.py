@@ -14,9 +14,9 @@ scaler = preprocessing.StandardScaler().fit(x_source)  #保存训练集的标准
 path='testing.data'
 x_predict=np.loadtxt(path,dtype=float)
 y_predict=np.zeros(shape=(len(x_predict),1))
-x_predict=scaler.transform(x_predict)
+x_predict1=scaler.transform(x_predict)
 clf = joblib.load('svm_train.pkl')
-for i,x in enumerate(x_predict):
+for i,x in enumerate(x_predict1):
 	y_predict[i]=clf.predict([x])
 result=np.hstack([x_predict,y_predict])
 result=pd.DataFrame(result)
